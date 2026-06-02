@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RG Cube Game Guide — 100+ Essential Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #1a1a24;
+  --border: #2a2a3a;
+  --text: #e8e8f0;
+  --muted: #7070a0;
+  --cyan: #00e5ff;
+  --yellow: #ffe600;
+  --green: #00ff88;
+  --red: #ff3366;
+  --purple: #b060ff;
+  --orange: #ff8800;
+  --pink: #ff60b0;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Syne',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* scanline overlay */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);
+  pointer-events:none;z-index:999;
+}
+
+/* HEADER */
+.header{
+  position:relative;
+  padding:3rem 2rem 2rem;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(0,229,255,.05) 0%,transparent 100%);
+  overflow:hidden;
+}
+.header::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,229,255,.08),transparent);
+}
+.header-badge{
+  font-family:'Press Start 2P',monospace;
+  font-size:.5rem;
+  color:var(--cyan);
+  letter-spacing:.15em;
+  background:rgba(0,229,255,.08);
+  border:1px solid rgba(0,229,255,.3);
+  padding:.4rem .8rem;
+  display:inline-block;
+  margin-bottom:1.5rem;
+}
+.header h1{
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(1rem,3vw,1.8rem);
+  line-height:1.6;
+  color:var(--yellow);
+  text-shadow:0 0 30px rgba(255,230,0,.4);
+  margin-bottom:.75rem;
+  position:relative;
+}
+.header p{
+  color:var(--muted);
+  font-size:.95rem;
+  font-family:'JetBrains Mono',monospace;
+  max-width:600px;
+  margin:0 auto 2rem;
+}
+
+/* TIER BANNER */
+.tier-banner{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.75rem;
+  justify-content:center;
+  max-width:900px;
+  margin:0 auto;
+  position:relative;
+}
+.tier{
+  display:flex;align-items:center;gap:.5rem;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:.5rem .9rem;
+  font-size:.7rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.tier-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.t-green{background:var(--green);box-shadow:0 0 8px var(--green)}
+.t-cyan{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.t-yellow{background:var(--yellow);box-shadow:0 0 8px var(--yellow)}
+.t-orange{background:var(--orange);box-shadow:0 0 8px var(--orange)}
+.t-red{background:var(--red);box-shadow:0 0 8px var(--red)}
+
+/* FILTER BAR */
+.filter-bar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,15,.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:1rem 1.5rem;
+}
+.filter-row{
+  display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+  max-width:1400px;margin:0 auto;
+}
+.filter-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  color:var(--muted);
+  letter-spacing:.1em;
+  white-space:nowrap;
+  padding-right:.25rem;
+}
+.filter-group{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.fbtn{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:.3rem .6rem;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.fbtn:hover{border-color:var(--cyan);color:var(--cyan)}
+.fbtn.active{background:var(--cyan);border-color:var(--cyan);color:#000;font-weight:700}
+.fbtn.active-genre{background:var(--yellow);border-color:var(--yellow);color:#000;font-weight:700}
+.fbtn.active-diff{background:var(--purple);border-color:var(--purple);color:#fff;font-weight:700}
+.fbtn.active-mp{background:var(--green);border-color:var(--green);color:#000;font-weight:700}
+.filter-divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
+#searchInput{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:.3rem .7rem;
+  outline:none;
+  width:160px;
+  transition:border-color .15s;
+}
+#searchInput:focus{border-color:var(--cyan)}
+#searchInput::placeholder{color:var(--muted)}
+.result-count{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  color:var(--muted);
+  margin-left:auto;
+  white-space:nowrap;
+}
+
+/* MAIN GRID */
+main{max-width:1400px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* PLATFORM SECTION */
+.platform-section{margin-bottom:3rem}
+.platform-section.hidden{display:none}
+.platform-header{
+  display:flex;align-items:center;gap:1rem;
+  border-bottom:1px solid var(--border);
+  padding-bottom:.75rem;
+  margin-bottom:1.5rem;
+}
+.platform-tag{
+  font-family:'Press Start 2P',monospace;
+  font-size:.55rem;
+  padding:.35rem .7rem;
+  border:1px solid;
+  letter-spacing:.05em;
+}
+.tag-nes{border-color:#ff6b6b;color:#ff6b6b}
+.tag-snes{border-color:#9b59b6;color:#9b59b6}
+.tag-gb{border-color:#8bc34a;color:#8bc34a}
+.tag-gbc{border-color:#ff9800;color:#ff9800}
+.tag-gba{border-color:#e91e63;color:#e91e63}
+.tag-gen{border-color:#2196f3;color:#2196f3}
+.tag-sms{border-color:#00bcd4;color:#00bcd4}
+.tag-tg16{border-color:#ff5722;color:#ff5722}
+.tag-neo{border-color:#ffc107;color:#ffc107}
+.tag-n64{border-color:#4caf50;color:#4caf50}
+.tag-ps1{border-color:#3f51b5;color:#3f51b5}
+.tag-nds{border-color:#00e5ff;color:#00e5ff;box-shadow:0 0 10px rgba(0,229,255,.3)}
+.tag-sat{border-color:#607d8b;color:#607d8b}
+.tag-dc{border-color:#ff8800;color:#ff8800}
+.tag-psp{border-color:#9e9e9e;color:#9e9e9e}
+.tag-ata{border-color:#795548;color:#795548}
+.platform-name{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:1.1rem;
+}
+.platform-emu{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  margin-left:auto;
+  padding:.2rem .5rem;
+  border:1px solid;
+  display:flex;align-items:center;gap:.35rem;
+}
+.emu-dot{width:6px;height:6px;border-radius:50%}
+.emu-flawless{border-color:rgba(0,255,136,.3);color:var(--green)}
+.emu-flawless .emu-dot{background:var(--green)}
+.emu-best{border-color:rgba(0,229,255,.3);color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.2)}
+.emu-best .emu-dot{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.emu-good{border-color:rgba(255,230,0,.3);color:var(--yellow)}
+.emu-good .emu-dot{background:var(--yellow)}
+.emu-warn{border-color:rgba(255,136,0,.3);color:var(--orange)}
+.emu-warn .emu-dot{background:var(--orange)}
+
+/* GAMES GRID */
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:1rem;
+}
+
+/* GAME CARD */
+.game-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:1.25rem;
+  position:relative;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+  cursor:default;
+}
+.game-card:hover{
+  border-color:rgba(0,229,255,.3);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.game-card.hidden{display:none}
+.card-top{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem}
+.game-num{
+  font-family:'Press Start 2P',monospace;
+  font-size:.45rem;
+  color:var(--muted);
+  opacity:.5;
+  flex-shrink:0;
+  margin-top:.2rem;
+}
+.game-title{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:1rem;
+  line-height:1.2;
+  flex:1;
+}
+.game-score{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  font-weight:500;
+  padding:.2rem .5rem;
+  border:1px solid;
+  flex-shrink:0;
+  text-align:center;
+  line-height:1.3;
+}
+.score-high{border-color:rgba(0,255,136,.4);color:var(--green);background:rgba(0,255,136,.06)}
+.score-mid{border-color:rgba(255,230,0,.4);color:var(--yellow);background:rgba(255,230,0,.06)}
+.score-ok{border-color:rgba(255,136,0,.4);color:var(--orange);background:rgba(255,136,0,.06)}
+.score-classic{border-color:rgba(176,96,255,.4);color:var(--purple);background:rgba(176,96,255,.06)}
+
+.game-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.75rem}
+.tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.55rem;
+  padding:.15rem .4rem;
+  border:1px solid;
+  white-space:nowrap;
+}
+.tag-genre{border-color:rgba(0,229,255,.25);color:var(--cyan);background:rgba(0,229,255,.05)}
+.tag-diff-easy{border-color:rgba(0,255,136,.25);color:var(--green)}
+.tag-diff-medium{border-color:rgba(255,230,0,.25);color:var(--yellow)}
+.tag-diff-hard{border-color:rgba(255,51,102,.25);color:var(--red)}
+.tag-mp{border-color:rgba(176,96,255,.25);color:var(--purple)}
+.tag-time{border-color:rgba(255,136,0,.25);color:var(--orange)}
+.tag-killer{border-color:rgba(0,229,255,.6);color:var(--cyan);background:rgba(0,229,255,.12);box-shadow:0 0 8px rgba(0,229,255,.2)}
+
+.game-summary{
+  font-size:.82rem;
+  color:rgba(232,232,240,.75);
+  line-height:1.55;
+  margin-bottom:.75rem;
+}
+
+.pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem}
+.pros,.cons{background:var(--bg3);padding:.6rem .75rem;border-top:2px solid}
+.pros{border-color:rgba(0,255,136,.35)}
+.cons{border-color:rgba(255,51,102,.35)}
+.pros-cons-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.5rem;
+  letter-spacing:.12em;
+  margin-bottom:.4rem;
+  font-weight:500;
+}
+.pros .pros-cons-label{color:var(--green)}
+.cons .pros-cons-label{color:var(--red)}
+.pros-cons ul{list-style:none;padding:0}
+.pros-cons li{
+  font-size:.72rem;
+  color:rgba(232,232,240,.7);
+  line-height:1.45;
+  padding-left:.75rem;
+  position:relative;
+  margin-bottom:.2rem;
+}
+.pros li::before{content:'↑';position:absolute;left:0;color:var(--green);font-size:.6rem}
+.cons li::before{content:'↓';position:absolute;left:0;color:var(--red);font-size:.6rem}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:2rem;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.6rem;
+  color:var(--muted);
+}
+footer span{color:var(--cyan)}
+
+/* NO RESULTS */
+#noResults{
+  display:none;
+  text-align:center;
+  padding:4rem 2rem;
+  color:var(--muted);
+  font-family:'Press Start 2P',monospace;
+  font-size:.7rem;
+  line-height:2;
+}
+
+@media(max-width:600px){
+  .header h1{font-size:.9rem}
+  .games-grid{grid-template-columns:1fr}
+  .filter-row{gap:.35rem}
+  .pros-cons{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-badge">ANBERNIC RG CUBE // GAME GUIDE v2.0</div>
+  <h1>100+ ESSENTIAL GAMES<br>FOR YOUR RG CUBE</h1>
+  <p>// Platform-by-platform picks · Critic scores · Pros & cons · Full filter system</p>
+  <div class="tier-banner">
+    <div class="tier"><span class="tier-dot t-green"></span>FLAWLESS: NES · SNES · GB · GBC · GBA · Genesis · PS1</div>
+    <div class="tier"><span class="tier-dot t-cyan"></span>BEST-IN-CLASS: Nintendo DS (1:1 dual screen — killer feature)</div>
+    <div class="tier"><span class="tier-dot t-yellow"></span>VERY GOOD: N64 · Saturn · Dreamcast</div>
+    <div class="tier"><span class="tier-dot t-orange"></span>LETTERBOXED: PSP (16:9 on 1:1 screen)</div>
+    <div class="tier"><span class="tier-dot t-red"></span>NOT RECOMMENDED: GameCube · PS2 (frame drops)</div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-row">
+    <span class="filter-label">PLATFORM</span>
+    <div class="filter-group">
+      <button class="fbtn active" data-filter="platform" data-value="all">ALL</button>
+      <button class="fbtn" data-filter="platform" data-value="nes">NES</button>
+      <button class="fbtn" data-filter="platform" data-value="snes">SNES</button>
+      <button class="fbtn" data-filter="platform" data-value="gb">GB</button>
+      <button class="fbtn" data-filter="platform" data-value="gbc">GBC</button>
+      <button class="fbtn" data-filter="platform" data-value="gba">GBA</button>
+      <button class="fbtn" data-filter="platform" data-value="gen">GENESIS</button>
+      <button class="fbtn" data-filter="platform" data-value="sms">SMS/GG</button>
+      <button class="fbtn" data-filter="platform" data-value="tg16">TG-16</button>
+      <button class="fbtn" data-filter="platform" data-value="neo">NEO GEO</button>
+      <button class="fbtn" data-filter="platform" data-value="n64">N64</button>
+      <button class="fbtn" data-filter="platform" data-value="ps1">PS1</button>
+      <button class="fbtn" data-filter="platform" data-value="nds">NDS ★</button>
+      <button class="fbtn" data-filter="platform" data-value="sat">SATURN</button>
+      <button class="fbtn" data-filter="platform" data-value="dc">DREAMCAST</button>
+      <button class="fbtn" data-filter="platform" data-value="psp">PSP</button>
+      <button class="fbtn" data-filter="platform" data-value="ata">ATARI</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">GENRE</span>
+    <div class="filter-group">
+      <button class="fbtn active-genre" data-filter="genre" data-value="all">ALL</button>
+      <button class="fbtn" data-filter="genre" data-value="action">Action/Adv</button>
+      <button class="fbtn" data-filter="genre" data-value="rpg">RPG</button>
+      <button class="fbtn" data-filter="genre" data-value="fighting">Fighting</button>
+      <button class="fbtn" data-filter="genre" data-value="platformer">Platformer</button>
+      <button class="fbtn" data-filter="genre" data-value="shooter">Shooter</button>
+      <button class="fbtn" data-filter="genre" data-value="sports">Sports/Racing</button>
+      <button class="fbtn" data-filter="genre" data-value="puzzle">Puzzle/Strategy</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">DIFF</span>
+    <div class="filter-group">
+      <button class="fbtn active-diff" data-filter="diff" data-value="all">ALL</button>
+      <button class="fbtn" data-filter="diff" data-value="easy">Easy</button>
+      <button class="fbtn" data-filter="diff" data-value="medium">Medium</button>
+      <button class="fbtn" data-filter="diff" data-value="hard">Hard</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">MP</span>
+    <div class="filter-group">
+      <button class="fbtn active-mp" data-filter="mp" data-value="all">ALL</button>
+      <button class="fbtn" data-filter="mp" data-value="yes">Yes</button>
+      <button class="fbtn" data-filter="mp" data-value="no">No</button>
+    </div>
+    <div class="filter-divider"></div>
+    <input type="text" id="searchInput" placeholder="Search games...">
+    <span class="result-count" id="resultCount"></span>
+  </div>
+</div>
+
+<main>
+<div id="noResults">NO GAMES FOUND<br><small style="font-size:.5rem;color:var(--muted)">try different filters</small></div>
+
+<!-- ========== NES ========== -->
+<section class="platform-section" data-platform="nes">
+<div class="platform-header">
+  <div class="platform-tag tag-nes">NES</div>
+  <span class="platform-name">Nintendo Entertainment System</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="nes" data-genre="platformer" data-diff="medium" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#01</span>
+  <span class="game-title">Super Mario Bros. 3</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Platformer</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-mp">2-Player</span>
+  <span class="tag tag-time">⏱ 8–12 hrs</span>
+</div>
+<p class="game-summary">Mario traverses eight themed worlds with an overworld map, new power-ups (Tanooki suit, Hammer Bros. suit) and airship boss battles. Widely regarded as one of the greatest platformers ever made — revolutionary level design, tight controls, and massive variety.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Revolutionary level design</li><li>Huge variety across 8 worlds</li><li>Iconic power-ups</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>No in-level saves on original</li><li>Demanding late-game</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="action" data-diff="hard" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#02</span>
+  <span class="game-title">The Legend of Zelda</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Action/Adventure</span>
+  <span class="tag tag-diff-hard">Hard</span>
+  <span class="tag tag-time">⏱ 15–20 hrs</span>
+</div>
+<p class="game-summary">Link explores the open kingdom of Hyrule, collecting Triforce fragments and clearing secret dungeons to rescue Princess Zelda. The game that defined the open-ended action-adventure template for all that followed.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Pioneering open world</li><li>Rewarding exploration</li><li>High replay value</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Cryptic secrets with no hints</li><li>Dated combat mechanics</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="platformer" data-diff="hard" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#03</span>
+  <span class="game-title">Mega Man 2</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Platformer</span>
+  <span class="tag tag-diff-hard">Hard</span>
+  <span class="tag tag-time">⏱ 4–6 hrs</span>
+</div>
+<p class="game-summary">The Blue Bomber battles eight Robot Masters in any order, absorbing their weapons before storming Dr. Wily's fortress. Celebrated for its near-perfect weapon/level balance and legendary soundtrack that holds up decades later.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Superb weapon/level balance</li><li>Iconic soundtrack</li><li>Highly replayable</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Spike/insta-death traps</li><li>No mid-stage saves</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="shooter" data-diff="hard" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#04</span>
+  <span class="game-title">Contra</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Shooter</span>
+  <span class="tag tag-diff-hard">Hard</span>
+  <span class="tag tag-mp">2P Co-op</span>
+  <span class="tag tag-time">⏱ 1–2 hrs</span>
+</div>
+<p class="game-summary">Two commandos blast through alien-infested stages in fast, readable side-scrolling action. Home of the famous Konami Code and the template for the run-and-gun genre. Brilliant in two-player co-op.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Polished run-and-gun action</li><li>Excellent co-op</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Brutally hard one-hit deaths</li><li>Very short</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="platformer" data-diff="hard" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#05</span>
+  <span class="game-title">Castlevania</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Action/Platformer</span>
+  <span class="tag tag-diff-hard">Hard</span>
+  <span class="tag tag-time">⏱ 2–4 hrs</span>
+</div>
+<p class="game-summary">Simon Belmont whips his way through Dracula's castle in atmospheric, monster-movie-inspired stages. The template-setter for an entire franchise and genre, with a foreboding Gothic atmosphere that still impresses.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Timeless Gothic atmosphere</li><li>Iconic soundtrack</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Stiff controls</li><li>Punishing difficulty</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="sports" data-diff="hard" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#06</span>
+  <span class="game-title">Punch-Out!!</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Sports/Fighting</span>
+  <span class="tag tag-diff-hard">Hard</span>
+  <span class="tag tag-time">⏱ 2–4 hrs</span>
+</div>
+<p class="game-summary">Pattern-based boxing where Little Mac fights increasingly absurd opponents culminating in Mike Tyson. A masterclass in timing-based gameplay with one of the most memorable rosters of any NES game.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Masterful timing gameplay</li><li>Unforgettable opponent roster</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Steep late-game difficulty</li><li>No multiplayer</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="nes" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#07</span>
+  <span class="game-title">Dragon Warrior</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">RPG</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-time">⏱ 15–20 hrs</span>
+</div>
+<p class="game-summary">The console JRPG progenitor — a lone hero levels up and explores to defeat the Dragonlord. Historically foundational as the first JRPG to reach Western audiences in significant numbers.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Approachable, focused JRPG</li><li>Historic importance</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Heavy grinding required</li><li>Very dated by modern standards</li></ul></div>
+</div>
+</div>
+
+</div><!-- /games-grid -->
+</section>
+
+<!-- ========== SNES ========== -->
+<section class="platform-section" data-platform="snes">
+<div class="platform-header">
+  <div class="platform-tag tag-snes">SNES</div>
+  <span class="platform-name">Super Nintendo Entertainment System</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="snes" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#08</span>
+  <span class="game-title">Zelda: A Link to the Past</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Action/Adventure</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-time">⏱ 15–20 hrs</span>
+</div>
+<p class="game-summary">Link travels between the Light and Dark Worlds to rescue Zelda and defeat Ganon — introducing the Master Sword, spin attack, and heart containers. Consistently ranked the #1 SNES game by critics and community alike.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Perfect pacing and design</li><li>Brilliant dual-world mechanic</li><li>Timeless 20+ years later</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>No significant weaknesses</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#09</span>
+  <span class="game-title">Super Metroid</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Action/Adventure</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-time">⏱ 8–12 hrs</span>
+</div>
+<p class="game-summary">Samus explores the labyrinthine planet Zebes in the genre-defining "Metroidvania." Atmospheric, non-linear, and superbly paced — the game that codified an entire genre and still ranks among the greatest games ever made.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Unmatched atmosphere</li><li>Superb non-linear level design</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Can be cryptic early on</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#10</span>
+  <span class="game-title">Chrono Trigger</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">RPG</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-time">⏱ 20–25 hrs</span>
+</div>
+<p class="game-summary">A time-traveling party works to prevent an apocalypse — featuring the Active Time Battle system, Akira Toriyama art, and multiple endings. Often called the greatest JRPG ever made, and the argument is hard to refute.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Legendary story and music</li><li>Fast, inventive combat</li><li>New Game+ with 13 endings</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Relatively short for an RPG</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="platformer" data-diff="easy" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#11</span>
+  <span class="game-title">Super Mario World</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Platformer</span>
+  <span class="tag tag-diff-easy">Easy</span>
+  <span class="tag tag-mp">2-Player</span>
+  <span class="tag tag-time">⏱ 10–15 hrs</span>
+</div>
+<p class="game-summary">Mario and Yoshi explore Dinosaur Land across secret-packed levels to rescue Peach. The SNES launch title that introduced Yoshi, Cape Mario, and a sprawling map full of hidden exits and star worlds.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tons of secrets and hidden levels</li><li>Yoshi is brilliant</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Easy for seasoned platformer fans</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#12</span>
+  <span class="game-title">Final Fantasy VI</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">RPG</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-time">⏱ 30–40 hrs</span>
+</div>
+<p class="game-summary">A steampunk world's rebel group fights an evil empire and the iconic villain Kefka — with a massive cast and a genre-defining late-game twist. Widely regarded as the pinnacle of 16-bit JRPG storytelling.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Best-written classic Final Fantasy</li><li>Huge ensemble cast</li><li>Epic villain arc</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Large cast can dilute focus</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#13</span>
+  <span class="game-title">Street Fighter II Turbo</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Fighting</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-mp">2-Player</span>
+  <span class="tag tag-time">⏱ Endless</span>
+</div>
+<p class="game-summary">The arcade phenomenon that codified the fighting game genre, complete with combos, special moves, and the World Warrior roster. The SNES port was the best home version of its era and helped sell millions of systems.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Foundational fighter; still fun</li><li>Tight, responsive controls</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Small roster vs. later iterations</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="platformer" data-diff="medium" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#14</span>
+  <span class="game-title">Donkey Kong Country</span>
+  <div class="game-score score-high">95%</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Platformer</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-mp">2P Co-op</span>
+  <span class="tag tag-time">⏱ 6–8 hrs</span>
+</div>
+<p class="game-summary">Pre-rendered visuals and tight platforming as DK and Diddy recover their banana hoard from K. Rool. Its realistic graphics were revolutionary in 1994 and its level design holds up exceptionally well today.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Revolutionary graphics for era</li><li>Excellent level design</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Some cheap deaths</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top">
+  <span class="game-num">#15</span>
+  <span class="game-title">Super Mario Kart</span>
+  <div class="game-score score-classic">CLASSIC</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">Sports/Racing</span>
+  <span class="tag tag-diff-medium">Medium</span>
+  <span class="tag tag-mp">2-Player</span>
+  <span class="tag tag-time">⏱ 6–10 hrs</span>
+</div>
+<p class="game-summary">The kart racer that started it all, using Mode 7 scaling tricks to create 3D-feeling tracks, with item-based combat and the beloved Battle Mode. Still playable and still fun, especially with a second player.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Genre-founder; iconic tracks</li><li>Great two-player Battle Mode</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Rubber-band AI; dated handling</li></ul></div>
+</div>
+</div>
+
+<div class="game-card" data-platform="snes" data-genre="rpg" data-diff="easy" data-mp="no">
+<div class="card-top">
+  <span class="game-num">#16</span>
+  <span class="game-title">Super Mario RPG</span>
+  <div class="game-score score-high">TOP<br>PICK</div>
+</div>
+<div class="game-tags">
+  <span class="tag tag-genre">RPG</span>
+  <span class="tag tag-diff-easy">Easy</span>
+  <span class="tag tag-time">⏱ 15–20 hrs</span>
+</div>
+<p class="game-summary">Square's Mario/RPG fusion with timed-hit combat and a charming cast including Mallow and Geno. A hilarious, inventive game that proved Mario could work outside of platformers and spawned the entire Paper Mario lineage.</p>
+<div class="pros-cons">
+  <div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Charming story and characters</li><li>Accessible, inventive combat</li></ul></div>
+  <div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short and easy by RPG standards</li></ul></div>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== GAME BOY ========== -->
+<section class="platform-section" data-platform="gb">
+<div class="platform-header">
+  <div class="platform-tag tag-gb">GAME BOY</div>
+  <span class="platform-name">Game Boy (DMG)</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — Perfect 1:1 fit</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="gb" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#17</span><span class="game-title">Zelda: Link's Awakening</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 10–15 hrs</span></div>
+<p class="game-summary">Shipwrecked Link explores the surreal Koholint Island to awaken the Wind Fish. Frequently voted the best Game Boy game — dense, quirky world-building, great dungeons, and an emotional ending few handhelds matched.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Dense, surreal world</li><li>Great dungeons and items</li><li>Emotional finale</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Limited inventory swapping</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gb" data-genre="puzzle" data-diff="easy" data-mp="yes">
+<div class="card-top"><span class="game-num">#18</span><span class="game-title">Tetris</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-mp">Link Cable</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The pack-in puzzle phenomenon that sold the Game Boy. Stack falling tetrominoes to clear lines in the timeless puzzle game that proved simple mechanics can achieve infinite depth.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Timeless; endlessly replayable</li><li>Perfect pick-up-and-play</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>No progression or story</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gb" data-genre="rpg" data-diff="easy" data-mp="yes">
+<div class="card-top"><span class="game-num">#19</span><span class="game-title">Pokémon Red / Blue</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-mp">Trade/Battle</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">The cultural juggernaut that defined a generation — catch, train and battle 151 Pokémon across Kanto. The core social loop of trading and battling made it genuinely revolutionary for portable gaming.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep, accessible RPG loop</li><li>Social trading mechanic</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated balance and bugs</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gb" data-genre="platformer" data-diff="easy" data-mp="no">
+<div class="card-top"><span class="game-num">#20</span><span class="game-title">Super Mario Land 2</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">Mario reclaims his castle from Wario (Wario's debut!) across imaginative non-linear zones including a giant Mario statue, outer space, and a pumpkin zone. One of the best-looking Game Boy games ever made.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Creative, imaginative zones</li><li>Introduced Wario</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Easy and short</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gb" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#21</span><span class="game-title">Donkey Kong '94</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Starts as the classic arcade game then explodes into a 100+ level puzzle-platformer with an expanded Mario moveset. One of the most underrated games on the platform — genuinely enormous in scope.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Hugely inventive; massive</li><li>Excellent controls</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Difficulty ramps hard</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gb" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#22</span><span class="game-title">Metroid II: Return of Samus</span><div class="game-score score-mid">GOOD</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Samus descends into planet SR388 to exterminate the Metroid species in a claustrophobic, tense underground adventure. Atmospheric and rewarding despite the monochrome limitations.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Unique claustrophobic atmosphere</li><li>Great mobility upgrades</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Confusing without a map</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== GBC ========== -->
+<section class="platform-section" data-platform="gbc">
+<div class="platform-header">
+  <div class="platform-tag tag-gbc">GBC</div>
+  <span class="platform-name">Game Boy Color</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — Gorgeous on 1:1 screen</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="gbc" data-genre="rpg" data-diff="easy" data-mp="yes">
+<div class="card-top"><span class="game-num">#23</span><span class="game-title">Pokémon Gold / Silver / Crystal</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-mp">Link Cable</span><span class="tag tag-time">⏱ 40+ hrs</span></div>
+<p class="game-summary">Explore Johto (and revisit Kanto!) with 100 new Pokémon, day/night cycles and breeding. The series peak for many fans — two full regions, a secret post-game, and refined mechanics throughout.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Two full regions to explore</li><li>Day/night cycle and breeding</li><li>Huge content</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Kanto endgame feels underleveled</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gbc" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#24</span><span class="game-title">Zelda: Oracle of Seasons/Ages</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 12–15 hrs each</span></div>
+<p class="game-summary">Two interlinked adventures — Seasons emphasizes action, Ages focuses on puzzles — with a password link system that reveals a true ending when both are completed. Clever mechanics throughout.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Clever linked storyline</li><li>Each game has distinct feel</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Some obtuse puzzles</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gbc" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#25</span><span class="game-title">Metal Gear Solid (Ghost Babel)</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Stealth</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">A top-down alternate-canon stealth masterpiece with VR missions — one of the most ambitious GBC titles ever made. Faithful stealth gameplay, a great original story, and massive bonus content that rivals the main game.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Faithful stealth mechanics</li><li>Great original story</li><li>Massive VR mission bonus</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Heavy codec conversations</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gbc" data-genre="platformer" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#26</span><span class="game-title">Shantae</span><div class="game-score score-high">RARE<br>GEM</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 8–10 hrs</span></div>
+<p class="game-summary">A late-life technical showcase — the half-genie hero dances to transform and explores an interconnected world. One of the GBC's most impressive titles visually, with charming character design and inventive mechanics.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Gorgeous GBC graphics</li><li>Charming and inventive</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Heavy backtracking</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gbc" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#27</span><span class="game-title">Dragon Quest III (GBC)</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">An ambitious GBC remake of the JRPG classic with a class system, mini-games, and new dungeons. The story secretly serves as a prequel to the original Dragon Warrior — a revelation for fans of the series.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep job/class system</li><li>Massive RPG scope</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Heavy grinding required</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== GBA ========== -->
+<section class="platform-section" data-platform="gba">
+<div class="platform-header">
+  <div class="platform-tag tag-gba">GBA</div>
+  <span class="platform-name">Game Boy Advance</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — Scales beautifully</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="gba" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#28</span><span class="game-title">Zelda: The Minish Cap</span><div class="game-score score-high">89 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 12–15 hrs</span></div>
+<p class="game-summary">Link shrinks to Minish size to explore the world from a tiny perspective, fusing Kinstones with the inhabitants of Hyrule. Dense, inventive top-down adventure with expressive Capcom-developed art direction.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Dense world; clever shrink mechanic</li><li>Beautiful art direction</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Shorter than most Zelda games</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#29</span><span class="game-title">Metroid: Zero Mission</span><div class="game-score score-high">89 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–9 hrs</span></div>
+<p class="game-summary">A polished remake of the original Metroid with new areas, smoother controls, and a surprise twist ending that extends the game beyond the original's scope. One of the best-paced Metroid games ever made.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Rock-solid; superb pacing</li><li>Definitive original Metroid</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short; ending gimmick on replays</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#30</span><span class="game-title">Castlevania: Aria of Sorrow</span><div class="game-score score-high">91 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 8–12 hrs</span></div>
+<p class="game-summary">Set in 2035, Soma Cruz absorbs enemy souls to gain their powers in Dracula's castle — the "soul system" makes every enemy worth fighting. The deepest and best-received GBA Castlevania; Famitsu gave it 36/40.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep soul absorption system</li><li>Superb map design</li><li>Surprising story twists</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Was criminally undersold on release</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="puzzle" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#31</span><span class="game-title">Advance Wars</span><div class="game-score score-high">92 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Strategy</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Local MP</span><span class="tag tag-time">⏱ 25–30 hrs</span></div>
+<p class="game-summary">Turn-based tactical warfare with charming Commanding Officers and brilliantly balanced maps. One of the finest strategy games on any handheld — approachable on the surface, deep in practice, and endlessly replayable.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep, fair tactics</li><li>Approachable and addictive</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Some maps can be lengthy</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="puzzle" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#32</span><span class="game-title">Fire Emblem: Blazing Blade</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Strategy/RPG</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">Link Skirmish</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">The series' Western debut — tactical battles with permadeath and strong character writing make every decision weighty. An emotional, challenging strategy RPG that introduced millions to the franchise outside Japan.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Permadeath creates real tension</li><li>Excellent character writing</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Tough AI; permadeath can sting</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="rpg" data-diff="easy" data-mp="no">
+<div class="card-top"><span class="game-num">#33</span><span class="game-title">Mario & Luigi: Superstar Saga</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-time">⏱ 20–25 hrs</span></div>
+<p class="game-summary">Humorous action-RPG with timing-based combat controlling both brothers simultaneously — a mechanic as unique as it is satisfying. Arguably the funniest writing in any Mario game, packed with personality.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Brilliant humor and personality</li><li>Inventive dual-brother combat</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Easy; combat lacks depth</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#34</span><span class="game-title">Mother 3</span><div class="game-score score-high">CULT<br>GEM</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 25–30 hrs</span></div>
+<p class="game-summary">The cult sequel to EarthBound (fan-translated to English) — an emotional story with rhythm-based combat where hitting buttons to music deals bonus damage. One of the most unique and affecting RPGs on any platform.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Superb story and soundtrack</li><li>Unique rolling-HP and rhythm combat</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>No official English release</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#35</span><span class="game-title">Golden Sun</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 25–30 hrs</span></div>
+<p class="game-summary">Djinn-powered elemental combat and puzzle-solving in a polished JRPG that pushed the GBA hardware to its limits. Stunning visuals for its era, and the Djinn system adds meaningful depth to every encounter.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Beautiful visuals; deep Djinn system</li><li>Smart puzzle integration</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Enormous amounts of dialogue</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gba" data-genre="platformer" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#36</span><span class="game-title">Mega Man Zero</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Hardcore action-platforming with an open-mission structure starring Zero — darker and more demanding than the classic Mega Man series. Tight controls and stylish sprite work make the difficulty feel earned rather than cheap.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tight, stylish action</li><li>Challenging but fair</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very punishing for newcomers</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== GENESIS ========== -->
+<section class="platform-section" data-platform="gen">
+<div class="platform-header">
+  <div class="platform-tag tag-gen">GENESIS</div>
+  <span class="platform-name">Sega Genesis / Mega Drive</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — TV bezels look great</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="gen" data-genre="platformer" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#37</span><span class="game-title">Sonic the Hedgehog 2</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">Sonic and Tails blast through iconic zones collecting rings and Chaos Emeralds — the best-selling Genesis game after the original. The spin-dash debut, co-op mode, and expanded level design made it the definitive 16-bit Sonic.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Lightning speed; iconic zones</li><li>Great 2-player co-op</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Some cheap hits from speed</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gen" data-genre="action" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#38</span><span class="game-title">Streets of Rage 2</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2P Co-op</span><span class="tag tag-time">⏱ 2 hrs</span></div>
+<p class="game-summary">Four heroes brawl through a crime-ridden city with deep combat and Yuzo Koshiro's legendary techno soundtrack. Often cited as the best 16-bit beat-'em-up ever made — genre-defining co-op action.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tight, deep combat system</li><li>Legendary soundtrack</li><li>Incredible co-op</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Repetitive solo; short</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gen" data-genre="shooter" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#39</span><span class="game-title">Gunstar Heroes</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2P Co-op</span><span class="tag tag-time">⏱ 2–3 hrs</span></div>
+<p class="game-summary">Treasure's chaotic run-and-gun with a weapon-fusion system and inventive, spectacular bosses. A technical showpiece that pushed the Genesis to its absolute limits with on-screen chaos that still impresses.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Creative weapon fusion system</li><li>Spectacular boss fights</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Chaotic visuals can overwhelm</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gen" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#40</span><span class="game-title">Phantasy Star IV</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 30 hrs</span></div>
+<p class="game-summary">The acclaimed conclusion to the sci-fi Phantasy Star saga with macro-driven turn-based combat where technique combinations produce devastating effects. A polished, emotionally resonant JRPG hidden on a platform known for action.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Excellent story conclusion</li><li>Deep macro combo combat</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Some grinding required</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gen" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#41</span><span class="game-title">Shinobi III</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 2 hrs</span></div>
+<p class="game-summary">Joe Musashi's slick ninja action with tight, responsive controls and great stage variety — horseback stages, surfing, boss rush. Phenomenally well-controlled and paced; a near-perfect action game.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Phenomenal controls</li><li>Varied, inventive stages</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short playtime</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="gen" data-genre="shooter" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#42</span><span class="game-title">Contra: Hard Corps</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2P Co-op</span><span class="tag tag-time">⏱ 2 hrs</span></div>
+<p class="game-summary">A spin-off with branching story paths and relentless, spectacular action — four playable characters with distinct weapon sets. Considered by many the best Contra game, despite its punishing difficulty.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Branching story routes</li><li>Intense boss spectacle</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Extremely hard</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== SMS/GG ========== -->
+<section class="platform-section" data-platform="sms">
+<div class="platform-header">
+  <div class="platform-tag tag-sms">SMS/GG</div>
+  <span class="platform-name">Sega Master System & Game Gear</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="sms" data-genre="rpg" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#43</span><span class="game-title">Phantasy Star (SMS)</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 20–30 hrs</span></div>
+<p class="game-summary">A pioneering sci-fi/fantasy JRPG with first-person dungeons and Alis as its female lead hero — years ahead of the curve in 1987. Gorgeous pre-16-bit graphics and a compelling sci-fi world.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Groundbreaking sci-fi JRPG</li><li>Impressive visuals for era</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Brutal maze dungeons; heavy grind</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sms" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#44</span><span class="game-title">Wonder Boy III: Dragon's Trap</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Transform into various animal forms to explore an interconnected world in this 8-bit Metroidvania classic. An incredibly ahead-of-its-time design that received a gorgeous modern remake decades later.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Form-based exploration; charming</li><li>Proto-Metroidvania design</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Password save only</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sms" data-genre="platformer" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#45</span><span class="game-title">Sonic the Hedgehog (SMS)</span><div class="game-score score-mid">GOOD</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 2–3 hrs</span></div>
+<p class="game-summary">A distinct 8-bit Sonic with its own levels and design philosophy — quite different from the Genesis version. Solid portable Sonic platforming that stood on its own merits.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Solid 8-bit Sonic action</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>No spin-dash; cramped screen</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== TG16 ========== -->
+<section class="platform-section" data-platform="tg16">
+<div class="platform-header">
+  <div class="platform-tag tag-tg16">TG-16</div>
+  <span class="platform-name">TurboGrafx-16 / PC Engine</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — HuCard and CD</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="tg16" data-genre="shooter" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#46</span><span class="game-title">Blazing Lazers</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 1 hr/run</span></div>
+<p class="game-summary">A fast vertical shmup with deep weapon power-up progression — the TG-16 launch title that proved the hardware's capabilities. Smooth scrolling, inventive weapon combos, and accessible enough for newcomers to the genre.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Smooth; great weapon system</li><li>Accessible shmup</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Thin story/world-building</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="tg16" data-genre="shooter" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#47</span><span class="game-title">R-Type</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 1 hr/run</span></div>
+<p class="game-summary">The landmark side-scrolling shooter with the detachable Force pod — one of gaming's most iconic and imitated mechanics. The TG-16 port was the best home version of its era, with memorization-based strategic depth.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Iconic Force pod mechanic</li><li>Strategic depth and precision</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Brutally unforgiving</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="tg16" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#48</span><span class="game-title">Ys Book I & II (CD)</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 15–20 hrs</span></div>
+<p class="game-summary">Adol Christin's bump-combat action-RPG with CD audio and voice acting — a revolutionary package for 1989. The CD audio soundtrack is frequently cited among the greatest in gaming history.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Legendary CD soundtrack</li><li>Fast, atmospheric action-RPG</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Bump combat feels dated</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="tg16" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#49</span><span class="game-title">Devil's Crush</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Pinball</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">Demonic-themed video pinball where the ball is also a weapon against enemies and bosses — one of the greatest pinball games in gaming history. Addictive, deep scoring and a killer metal soundtrack.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Addictive deep scoring</li><li>Incredible metal soundtrack</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Niche appeal of pinball games</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="tg16" data-genre="platformer" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#50</span><span class="game-title">Bonk's Revenge</span><div class="game-score score-mid">GOOD</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">The caveman mascot headbutts through prehistoric stages with transformation power-ups in this charming sequel. One of the TG-16's signature franchises with a distinct personality.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Charming; creative power-ups</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Simple by modern standards</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== NEO GEO ========== -->
+<section class="platform-section" data-platform="neo">
+<div class="platform-header">
+  <div class="platform-tag tag-neo">NEO GEO</div>
+  <span class="platform-name">Neo Geo AES/MVS & Neo Geo Pocket</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — 2D fighters perfected</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="neo" data-genre="fighting" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#51</span><span class="game-title">Garou: Mark of the Wolves</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The final Fatal Fury — Terry Bogard's saga concludes with the "Just Defend" mechanic and some of the most gorgeous pixel art in gaming history. Widely called one of the greatest fighting games ever made.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Stunning pixel art</li><li>Deep Just Defend mechanic</li><li>Fluid, rewarding combat</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Steep learning curve</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="neo" data-genre="shooter" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#52</span><span class="game-title">Metal Slug 3</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2P Co-op</span><span class="tag tag-time">⏱ 1–2 hrs</span></div>
+<p class="game-summary">Frantic, hand-animated run-and-gun with branching paths, playable vehicles, and zombie transformations. The pinnacle of the series — visually astonishing pixel animation that took years to create.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Stunning hand-drawn animation</li><li>Branching paths; varied</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very hard; quarter-muncher design</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="neo" data-genre="fighting" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#53</span><span class="game-title">Samurai Shodown II</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">Weapon-based fighter emphasizing heavy single strikes and precise timing — one death-blow changes everything. Often called the best game on the Neo Geo hardware; a masterclass in tense, deliberate combat.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tense, high-stakes combat</li><li>Great visual style and roster</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Punishing; one mistake costs dearly</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="neo" data-genre="fighting" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#54</span><span class="game-title">The King of Fighters '98</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The "dream match" 3-on-3 team fighter with a massive roster — still played competitively decades later. The definitive KOF experience with some of the best team-building strategy in fighting game history.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Huge roster; refined combat</li><li>Still competitively active</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Complex for newcomers</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="neo" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#55</span><span class="game-title">SNK vs. Capcom: MOTM (NGPC)</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Link Cable</span><span class="tag tag-time">⏱ 5 hrs</span></div>
+<p class="game-summary">The acclaimed Neo Geo Pocket Color crossover fighter — widely considered among the best handheld fighting games ever made. Tight controls despite minimal buttons, deep for a handheld.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Superb handheld fighter</li><li>Deep mechanics on NGPC</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Small sprites by design</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== N64 ========== -->
+<section class="platform-section" data-platform="n64">
+<div class="platform-header">
+  <div class="platform-tag tag-n64">N64</div>
+  <span class="platform-name">Nintendo 64</span>
+  <div class="platform-emu emu-good"><span class="emu-dot"></span>VERY GOOD — Verify demanding titles</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="n64" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#56</span><span class="game-title">Zelda: Ocarina of Time</span><div class="game-score score-high">99 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 25–30 hrs</span><span class="tag tag-killer">★ RUNS GREAT</span></div>
+<p class="game-summary">Link time-travels across Hyrule with Z-targeting combat and music-based puzzles. The only video game to achieve a Metacritic score of 99 (per Guinness World Records). Genre-defining, timeless, and beautiful on the RG Cube.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Genre-defining 3D adventure</li><li>Timeless design 25+ years on</li><li>Iconic music and world</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated camera and combat</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="platformer" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#57</span><span class="game-title">Super Mario 64</span><div class="game-score score-high">94 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 12–15 hrs</span><span class="tag tag-killer">★ RUNS GREAT</span></div>
+<p class="game-summary">The launch title that nailed 3D platformer movement — collecting Power Stars across Peach's castle and its magical paintings. Arguably the single most influential 3D game ever made, and still joyful to play.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Revolutionary 3D controls</li><li>Joyful, inventive levels</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated camera system</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="shooter" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#58</span><span class="game-title">GoldenEye 007</span><div class="game-score score-high">96 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">4-Player</span><span class="tag tag-time">⏱ 10–12 hrs</span></div>
+<p class="game-summary">The console FPS landmark with stealth-optional objectives and legendary 4-player split-screen multiplayer. Its influence on console shooters was immeasurable — almost every FPS after it followed the template it created.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Defined console FPS genre</li><li>Iconic 4-player multiplayer</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Controls feel very dated now</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#59</span><span class="game-title">Mario Kart 64</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports/Racing</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">4-Player</span><span class="tag tag-time">⏱ 8–10 hrs</span><span class="tag tag-killer">★ RUNS GREAT</span></div>
+<p class="game-summary">Beloved kart racer with iconic tracks, the blue shell's debut, and a genuinely excellent 4-player Battle Mode. Toad's Turnpike, Rainbow Road, and Bowser's Castle are still cited as iconic track design decades later.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Superb 4-player multiplayer</li><li>Classic track design</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Rubber-band AI</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="platformer" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#60</span><span class="game-title">Banjo-Kazooie</span><div class="game-score score-high">92 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 12–15 hrs</span></div>
+<p class="game-summary">A polished collectathon with charming characters, varied worlds, and Rare's trademark British wit. The tightest controls and most cohesive world of any N64 platformer outside Mario 64 itself.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tight platforming and charm</li><li>Brilliant Grant Kirkhope music</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Collectible backtracking</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="action" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#61</span><span class="game-title">Zelda: Majora's Mask</span><div class="game-score score-high">95 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 20–25 hrs</span></div>
+<p class="game-summary">A darker sequel built on a 3-day time loop and transformation masks. One of gaming's most structurally unique games — emotionally haunting, mechanically inventive, and deeply rewarding for patient players.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Unique time-loop structure</li><li>Emotionally resonant story</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Time-management stress</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="n64" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#62</span><span class="game-title">Super Smash Bros.</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">4-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The original platform fighter with Nintendo's mascots and chaotic 4-player action that invented a genre. Smaller and simpler than sequels, but genuinely excellent and impossible not to enjoy with friends.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Fun accessible fighting</li><li>Huge 4-player multiplayer joy</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Thin single-player vs. sequels</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== PS1 ========== -->
+<section class="platform-section" data-platform="ps1">
+<div class="platform-header">
+  <div class="platform-tag tag-ps1">PS1</div>
+  <span class="platform-name">PlayStation 1</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>EXCELLENT — Near-flawless with upscaling</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="ps1" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#63</span><span class="game-title">Final Fantasy VII</span><div class="game-score score-high">92 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 40 hrs</span></div>
+<p class="game-summary">Cloud Strife and eco-terrorists fight the Shinra megacorp and the iconic Sephiroth in the JRPG that went mainstream worldwide. The materia magic system remains one of the most elegant RPG mechanics ever designed.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Epic, cinematic story</li><li>Brilliant materia system</li><li>Iconic villain and moments</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated polygonal graphics</li><li>Random encounters</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#64</span><span class="game-title">Metal Gear Solid</span><div class="game-score score-high">94 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Stealth</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 12–15 hrs</span><span class="tag tag-killer">★ RUNS FLAWLESSLY</span></div>
+<p class="game-summary">Solid Snake infiltrates a nuclear facility in the genre-defining cinematic stealth game. Voice acting, fourth-wall breaks, and a genuinely complex narrative made this the moment games were taken seriously as art.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tense stealth gameplay</li><li>Groundbreaking story/voice acting</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated movement controls</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#65</span><span class="game-title">Castlevania: Symphony of the Night</span><div class="game-score score-high">93 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 10–15 hrs</span><span class="tag tag-killer">★ RUNS FLAWLESSLY</span></div>
+<p class="game-summary">Alucard explores Dracula's vast, secrets-filled castle in the definitive Metroidvania. RPG stat progression, dozens of hidden areas, and the genre-redefining map structure made this one of the greatest games ever made.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Vast exploration; RPG depth</li><li>Iconic inverted castle</li><li>Incredible sprite work</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Easy once stats are ground up</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#66</span><span class="game-title">Tony Hawk's Pro Skater 2</span><div class="game-score score-high">98 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ 8–12 hrs</span></div>
+<p class="game-summary">The seminal skateboarding game with combo-chaining mechanics and a legendary licensed soundtrack. A 98 on Metacritic — one of the highest-rated games in history. Addictive "one more run" loop design perfected.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Irresistible "one more run" loop</li><li>Legendary soundtrack</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short individual levels</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#67</span><span class="game-title">Resident Evil 3: Nemesis</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Jill Valentine flees Raccoon City pursued by the relentless Nemesis — a monster that can follow you between rooms. Tenser and faster than RE2, with a great dodge mechanic and high replay value via branching choices.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tense, relentless pacing</li><li>Great replay via choices</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Tank controls; fixed camera</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#68</span><span class="game-title">Tekken 3</span><div class="game-score score-high">96 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The fast, deep 3D fighter with a massive roster, great unlockables, and Tekken Force mode — often called the best PS1 fighter. The addition of sidestepping transformed the series into what it is today.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Superb roster; smooth gameplay</li><li>Deep fighting mechanics</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Limited single-player depth</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="puzzle" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#69</span><span class="game-title">Final Fantasy Tactics</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Strategy</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 40+ hrs</span></div>
+<p class="game-summary">Deep grid-based tactical combat with a job system and a politically rich story set in Ivalice. A demanding, richly rewarding strategy RPG whose story rivals Final Fantasy XII in depth and ambition.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep job/tactics system</li><li>Compelling political story</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very steep difficulty curve</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ps1" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#70</span><span class="game-title">Gran Turismo</span><div class="game-score score-high">96 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports/Racing</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">The realistic driving simulator with hundreds of cars that became the best-selling PS1 game ever. Deep car collection, license tests, and genuine simulation depth that appealed to car fans and gamers alike.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep car collection sim</li><li>Realistic handling model</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Grindy license tests</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== NDS ========== -->
+<section class="platform-section" data-platform="nds">
+<div class="platform-header">
+  <div class="platform-tag tag-nds">NDS ★</div>
+  <span class="platform-name">Nintendo DS — RG Cube Standout Platform</span>
+  <div class="platform-emu emu-best"><span class="emu-dot"></span>BEST-IN-CLASS — Dual screens on 1:1 display</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="nds" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#71</span><span class="game-title">Chrono Trigger DS</span><div class="game-score score-high">92 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 20–25 hrs</span><span class="tag tag-killer">★ DEFINITIVE VERSION</span></div>
+<p class="game-summary">The enhanced DS port of the SNES masterpiece with touch controls, a bonus dungeon, and new endings. The 2008 Metacritic DS Game of the Year. Best way to play the greatest JRPG — and the RG Cube shows both screens perfectly.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Definitive version with bonus content</li><li>Timeless ATB combat</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>It's a port at its core</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="action" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#72</span><span class="game-title">GTA: Chinatown Wars</span><div class="game-score score-high">93 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Local</span><span class="tag tag-time">⏱ 20+ hrs</span><span class="tag tag-killer">★ HIGHEST-RATED DS GAME</span></div>
+<p class="game-summary">Top-down crime saga with touch-based mini-games and a drug-trading economy in Liberty City. Guinness World Records certified it as the highest-rated DS game ever (93 Metacritic, 85 critic reviews). Brilliant use of the DS format.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep; stylish; touch mini-games</li><li>Highest-rated DS game in history</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Top-down view divides fans</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#73</span><span class="game-title">Mario Kart DS</span><div class="game-score score-high">91 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports/Racing</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Local/Online</span><span class="tag tag-time">⏱ 15+ hrs</span></div>
+<p class="game-summary">The first Mario Kart with online play, packed with retro courses and a robust single-player Missions mode. Still one of the best entries in the series — tight handling and a great track selection.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Tons of content; great handling</li><li>First online Mario Kart</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Snaking exploit in competitive</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="rpg" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#74</span><span class="game-title">The World Ends With You</span><div class="game-score score-high">88 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/RPG</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 20–25 hrs</span><span class="tag tag-killer">★ SHOWCASES DUAL SCREEN</span></div>
+<p class="game-summary">A dead teen plays the Reapers' Game in Shibuya, fighting on both DS screens simultaneously. Unique, stylish, and mechanically inventive — the definitive showcase of what made the DS special. Unmissable on RG Cube.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Unique dual-screen combat system</li><li>Incredible style and soundtrack</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Steep learning curve</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="rpg" data-diff="easy" data-mp="yes">
+<div class="card-top"><span class="game-num">#75</span><span class="game-title">Pokémon HeartGold / SoulSilver</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-mp">Local</span><span class="tag tag-time">⏱ 40+ hrs</span></div>
+<p class="game-summary">Acclaimed remakes of Gold/Silver with the Pokéwalker pedometer and every Pokémon following you on screen. Two full regions, improved graphics, and a mountain of post-game content — the definitive Pokémon experience.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Two complete regions</li><li>Walking Pokémon; Pokéwalker</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated vs. later entries</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="puzzle" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#76</span><span class="game-title">Advance Wars: Dual Strike</span><div class="game-score score-high">92 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Strategy</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">Local</span><span class="tag tag-time">⏱ 40–200 hrs</span></div>
+<p class="game-summary">Dual-screen tactical warfare with Co-Commanding Officers and a map editor — the largest Advance Wars experience. Uses the bottom screen as a second battlefield simultaneously. Deep, enormous, and endlessly replayable.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Massive tactics depth</li><li>Dual-screen battle system</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Complex for newcomers</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#77</span><span class="game-title">999: Nine Hours Nine Persons Nine Doors</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 15–20 hrs</span></div>
+<p class="game-summary">A gripping visual-novel escape-room thriller with multiple endings that piece together a complex, shocking narrative. One of the most compelling stories in handheld gaming — requires multiple playthroughs to fully understand.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Compelling multi-ending plot</li><li>Clever escape-room puzzles</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Repeated text on replays</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#78</span><span class="game-title">Castlevania: Dawn of Sorrow</span><div class="game-score score-high">89 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 10–12 hrs</span></div>
+<p class="game-summary">The Aria of Sorrow sequel on DS with improved visuals and the soul absorption system intact — one of the best-looking DS games. Great map design and a high-resolution art style uncommon for the platform.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>SotN-quality visuals on DS</li><li>Deep soul system intact</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Touch seal gimmicks</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="nds" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#79</span><span class="game-title">Rhythm Heaven</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Rhythm</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 8–10 hrs</span></div>
+<p class="game-summary">Quirky, addictive rhythm mini-games with charming abstract style — only released in Japan on DS, but widely available via emulation. One of the most delightful and personality-filled games Nintendo ever made.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Irresistibly charming</li><li>Addictive rhythm gameplay</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Tricky timing windows</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== SATURN ========== -->
+<section class="platform-section" data-platform="sat">
+<div class="platform-header">
+  <div class="platform-tag tag-sat">SATURN</div>
+  <span class="platform-name">Sega Saturn</span>
+  <div class="platform-emu emu-good"><span class="emu-dot"></span>VERY GOOD — 2D titles perfect</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="sat" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#80</span><span class="game-title">NiGHTS into Dreams</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">Sonic Team's aerial dream-flying score-attack masterpiece — the Saturn's killer app. A unique, inventive game that holds up beautifully and was years ahead of its time in flow-state game design.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Inventive; beautiful</li><li>Addictive score-attack loop</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short; niche score-chase appeal</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sat" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#81</span><span class="game-title">Panzer Dragoon Saga</span><div class="game-score score-high">GRAIL<br>TITLE</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 20–25 hrs</span></div>
+<p class="game-summary">A four-disc 3D RPG with real-time/turn-based hybrid combat and superb atmospheric world-building. One of gaming's rarest grails — historically expensive physically, but perfectly playable on the RG Cube via emulation.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Unique combat; stunning atmosphere</li><li>Accessible via emulation on RG Cube</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short and physically extremely rare</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sat" data-genre="action" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#82</span><span class="game-title">Guardian Heroes</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">6-Player</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">Treasure's brawler with RPG stat growth, branching story paths, and a deep combat system — up to 6 players in the chaotic versus mode. One of the most ambitious Saturn exclusives and a genuine masterpiece.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep combat; branching story</li><li>6-player versus madness</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Chaotic visuals can overwhelm</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sat" data-genre="shooter" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#83</span><span class="game-title">Radiant Silvergun</span><div class="game-score score-high">LEGEND</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2P Co-op</span><span class="tag tag-time">⏱ 1 hr/run</span></div>
+<p class="game-summary">Treasure's revered shmup with a complex seven-weapon system that rewards mastery. One of the most acclaimed shooters ever made — now accessible on the RG Cube after being historically expensive to own physically.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Genre landmark; deep scoring</li><li>Seven-weapon mastery system</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very hard; historically rare/expensive</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="sat" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#84</span><span class="game-title">Dragon Force</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Strategy/RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">Large-scale army battles with up to 200 units on screen simultaneously, and a branching story across eight playable monarchs. One of the most ambitious strategy games of the 32-bit era.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Epic large-scale battles</li><li>Eight story perspectives</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Originally had import barriers</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== DREAMCAST ========== -->
+<section class="platform-section" data-platform="dc">
+<div class="platform-header">
+  <div class="platform-tag tag-dc">DREAMCAST</div>
+  <span class="platform-name">Sega Dreamcast</span>
+  <div class="platform-emu emu-good"><span class="emu-dot"></span>VERY GOOD — Can exceed native resolution</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="dc" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#85</span><span class="game-title">SoulCalibur</span><div class="game-score score-high">98 MC ★</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span><span class="tag tag-killer">★ HIGHEST-RATED DC GAME</span></div>
+<p class="game-summary">The weapon-based 3D fighter whose Dreamcast port famously surpassed the arcade original. A Metacritic score of 98 — the highest-rated Dreamcast game ever — for its stunning visuals and deep 8-way movement system.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Stunning; surpassed arcade original</li><li>Deep 8-way movement</li><li>Loads of single-player content</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Thin story mode</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#86</span><span class="game-title">Shenmue</span><div class="game-score score-high">89%<br>GR</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 20–30 hrs</span></div>
+<p class="game-summary">Yu Suzuki's open-world revenge epic set in late-'80s Japan with QTEs and Virtua Fighter combat. Groundbreaking in its open-world design, time progression, and NPC scheduling — the blueprint for modern open-world games.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Groundbreaking open world</li><li>Unique atmospheric Japan setting</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Slow pacing; dated voice dub</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#87</span><span class="game-title">Jet Set Radio</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 8–10 hrs</span></div>
+<p class="game-summary">Cel-shaded graffiti-and-grinding rebellion in a stylish dystopian Tokyo — one of gaming's most distinct visual identities. The inline-skating controls have charm that modern games rarely match.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Iconic visual style; great soundtrack</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Fiddly graffiti controls</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="fighting" data-diff="hard" data-mp="yes">
+<div class="card-top"><span class="game-num">#88</span><span class="game-title">Marvel vs. Capcom 2</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The legendary 56-character 3-on-3 crossover tag fighter with frantic, air-combo-heavy gameplay. Still played at EVO tournaments — one of the most beloved fighting games in competitive history.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Enormous roster; frantic action</li><li>Competitive tournament staple</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Drastically unbalanced roster</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#89</span><span class="game-title">Skies of Arcadia</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 30–40 hrs</span></div>
+<p class="game-summary">A beloved JRPG of sky pirates and airship battles with a hopeful, swashbuckling story. One of the most optimistic, charming JRPGs ever made — and a genuine Dreamcast exclusive pearl.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Charming story and world</li><li>Airship combat system</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very high random encounter rate</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="sports" data-diff="easy" data-mp="no">
+<div class="card-top"><span class="game-num">#90</span><span class="game-title">Crazy Taxi</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports/Racing</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">Over-the-top arcade fare-running with a Offspring/Bad Religion punk soundtrack and wildly satisfying physics. Pure arcade fun — the kind of game you pick up for one run and realize an hour has passed.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Pure arcade joy; great soundtrack</li><li>Endlessly replayable</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very thin on content</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="dc" data-genre="fighting" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#91</span><span class="game-title">Power Stone</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Fighting</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">2-Player</span><span class="tag tag-time">⏱ 3–5 hrs</span></div>
+<p class="game-summary">Capcom's 3D arena fighter with interactive stages and transformations — Sega's answer to Super Smash Bros. Chaotic, joyful multiplayer action that still has no direct rival decades later.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Chaotic multiplayer fun</li><li>Unique interactive stages</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Shallow single-player</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== PSP ========== -->
+<section class="platform-section" data-platform="psp">
+<div class="platform-header">
+  <div class="platform-tag tag-psp">PSP</div>
+  <span class="platform-name">PlayStation Portable</span>
+  <div class="platform-emu emu-warn"><span class="emu-dot"></span>LETTERBOXED — 16:9 on 1:1 screen</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="psp" data-genre="action" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#92</span><span class="game-title">God of War: Chains of Olympus</span><div class="game-score score-high">91 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Adventure</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Kratos's brutal, cinematic combat shrunk impressively onto the PSP — 2008 Metacritic PSP Game of the Year. Console-quality action and spectacle on a handheld that shouldn't have been capable of it.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Console-quality action</li><li>Spectacular boss fights</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Short; letterboxed on RG Cube</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="psp" data-genre="puzzle" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#93</span><span class="game-title">Lumines</span><div class="game-score score-high">89 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Local</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">Tetsuya Mizuguchi's mesmerizing music-synced block puzzler — the PSP launch game that became the system's killer app. The audiovisual sync between the music and falling blocks creates a genuinely hypnotic experience.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Addictive; superb AV sync</li><li>Genuinely hypnotic</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Repetitive in long sessions</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="psp" data-genre="rpg" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#94</span><span class="game-title">Persona 3 Portable</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">RPG</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ 70+ hrs</span></div>
+<p class="game-summary">The acclaimed dungeon-crawler/social sim with party control and both male/female protagonist options — the most playable version of Persona 3. Dark, stylish, and mechanically deep with an emotionally resonant story.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep RPG/social sim hybrid</li><li>Female route adds new story</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>70+ hours; repetitive dungeon</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="psp" data-genre="puzzle" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#95</span><span class="game-title">FF Tactics: War of the Lions</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Strategy/RPG</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 40+ hrs</span></div>
+<p class="game-summary">The definitive Final Fantasy Tactics with new cutscenes, two new playable characters, and a retranslated script. The best version of one of the greatest strategy RPGs ever made — perfect for portable play.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Definitive tactics with new content</li><li>Rich political narrative</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Very steep difficulty curve</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="psp" data-genre="action" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#96</span><span class="game-title">Metal Gear Solid: Peace Walker</span><div class="game-score score-high">89 MC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Action/Stealth</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">4P Co-op</span><span class="tag tag-time">⏱ 30+ hrs</span></div>
+<p class="game-summary">Big Boss builds a mercenary army in Latin America with deep base management and co-op missions. Considered the proper MGS5 by Kojima himself — massive in scope for a handheld title.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep systems; great co-op</li><li>Enormous scope</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Grindy; menu-heavy</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="psp" data-genre="sports" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#97</span><span class="game-title">Ridge Racer (PSP)</span><div class="game-score score-high">TOP<br>PICK</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports/Racing</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Local</span><span class="tag tag-time">⏱ 6–8 hrs</span></div>
+<p class="game-summary">Near-perfect arcade drift-racing at the PSP's launch — silky smooth 60fps and pure arcade joy. The showcase tech demo that became a must-own game, proving what the PSP hardware could achieve.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Smooth 60fps; pure arcade joy</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Thin on modes</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+<!-- ========== ATARI ========== -->
+<section class="platform-section" data-platform="ata">
+<div class="platform-header">
+  <div class="platform-tag tag-ata">ATARI</div>
+  <span class="platform-name">Atari 2600 / 7800 / Lynx</span>
+  <div class="platform-emu emu-flawless"><span class="emu-dot"></span>FLAWLESS — Square screen suits these well</div>
+</div>
+<div class="games-grid">
+
+<div class="game-card" data-platform="ata" data-genre="platformer" data-diff="hard" data-mp="no">
+<div class="card-top"><span class="game-num">#98</span><span class="game-title">Pitfall! (2600)</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Platformer</span><span class="tag tag-diff-hard">Hard</span><span class="tag tag-time">⏱ 1 hr</span></div>
+<p class="game-summary">Swing on vines and dodge hazards in the jungle-running classic that sold 4 million copies — a landmark of early home gaming and one of the 2600's most beloved titles. Historic and fun in short bursts.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Historic; fun in short bursts</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Extremely dated</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ata" data-genre="shooter" data-diff="medium" data-mp="yes">
+<div class="card-top"><span class="game-num">#99</span><span class="game-title">Yars' Revenge (2600)</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Shooter</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-mp">Alternating</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The best-selling original Atari 2600 game — a unique shooter with a creative destruction mechanic. Deep and engaging for its era with a distinct visual style created from technical limitations.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Deep and unique for its era</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated visuals</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ata" data-genre="puzzle" data-diff="medium" data-mp="no">
+<div class="card-top"><span class="game-num">#100</span><span class="game-title">Ms. Pac-Man (2600/7800)</span><div class="game-score score-classic">CLASSIC</div></div>
+<div class="game-tags"><span class="tag tag-genre">Puzzle/Maze</span><span class="tag tag-diff-medium">Medium</span><span class="tag tag-time">⏱ Endless</span></div>
+<p class="game-summary">The superior maze-chase that outsold Pac-Man on its own merits. Timeless pick-up-and-play gaming that still holds up — the 7800 version is particularly impressive for the hardware.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Timeless; pick-up-and-play</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Simple by modern standards</li></ul></div></div>
+</div>
+
+<div class="game-card" data-platform="ata" data-genre="sports" data-diff="easy" data-mp="yes">
+<div class="card-top"><span class="game-num">#101</span><span class="game-title">California Games (Lynx)</span><div class="game-score score-mid">GOOD</div></div>
+<div class="game-tags"><span class="tag tag-genre">Sports</span><span class="tag tag-diff-easy">Easy</span><span class="tag tag-mp">Link Cable</span><span class="tag tag-time">⏱ 2–3 hrs</span></div>
+<p class="game-summary">The Lynx's standout multi-event sports showcase — surfing, BMX, footbag, skating, and more. A colorful technical showpiece for Atari's color handheld with charming gameplay across all events.</p>
+<div class="pros-cons"><div class="pros"><div class="pros-cons-label">PROS</div><ul><li>Varied events; colorful</li></ul></div><div class="cons"><div class="pros-cons-label">CONS</div><ul><li>Dated controls</li></ul></div></div>
+</div>
+
+</div>
+</section>
+
+</main>
+
+<footer>
+  <p>RG Cube Game Guide · 101 Essential Games · 15 Platforms · Built for <span>Anbernic RG Cube</span><br>
+  Scores sourced from Metacritic, GameRankings, Guinness World Records · Pre-2000 scores are retrospectively compiled · Emulation quality may vary by game</p>
+</footer>
+
+<script>
+const state = { platform:'all', genre:'all', diff:'all', mp:'all', search:'' };
+
+function applyFilters(){
+  let visible = 0;
+  document.querySelectorAll('.game-card').forEach(card=>{
+    const p = card.dataset.platform;
+    const g = card.dataset.genre;
+    const d = card.dataset.diff;
+    const m = card.dataset.mp;
+    const title = card.querySelector('.game-title').textContent.toLowerCase();
+    const summary = card.querySelector('.game-summary').textContent.toLowerCase();
+    const matchP = state.platform === 'all' || p === state.platform;
+    const matchG = state.genre === 'all' || g === state.genre;
+    const matchD = state.diff === 'all' || d === state.diff;
+    const matchM = state.mp === 'all' || m === state.mp;
+    const matchS = state.search === '' || title.includes(state.search.toLowerCase()) || summary.includes(state.search.toLowerCase());
+    if(matchP && matchG && matchD && matchM && matchS){
+      card.classList.remove('hidden'); visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Hide empty platform sections
+  document.querySelectorAll('.platform-section').forEach(sec=>{
+    const visibleCards = sec.querySelectorAll('.game-card:not(.hidden)').length;
+    sec.classList.toggle('hidden', visibleCards === 0);
+  });
+
+  // No results message
+  const noRes = document.getElementById('noResults');
+  noRes.style.display = visible === 0 ? 'block' : 'none';
+
+  // Count
+  document.getElementById('resultCount').textContent = visible + ' games';
+}
+
+// Platform buttons
+document.querySelectorAll('[data-filter="platform"]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-filter="platform"]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.platform = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+// Genre buttons
+document.querySelectorAll('[data-filter="genre"]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-filter="genre"]').forEach(b=>b.classList.remove('active','active-genre'));
+    btn.classList.add('active-genre');
+    state.genre = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+// Diff buttons
+document.querySelectorAll('[data-filter="diff"]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-filter="diff"]').forEach(b=>b.classList.remove('active','active-diff'));
+    btn.classList.add('active-diff');
+    state.diff = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+// MP buttons
+document.querySelectorAll('[data-filter="mp"]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-filter="mp"]').forEach(b=>b.classList.remove('active','active-mp'));
+    btn.classList.add('active-mp');
+    state.mp = btn.dataset.value;
+    applyFilters();
+  });
+});
+
+// Search
+document.getElementById('searchInput').addEventListener('input',e=>{
+  state.search = e.target.value.trim();
+  applyFilters();
+});
+
+// Init
+applyFilters();
+</script>
+</body>
+</html>
